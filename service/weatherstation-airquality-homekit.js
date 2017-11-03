@@ -18,16 +18,29 @@ module.exports = function(pHomebridge) {
         .on('get', this.getAirQuality.bind(this))
         .eventEnabled = true;
 
+      var co2LevelCharacteristic = this.getCharacteristic(Characteristic.CarbonDioxideLevel) ||
+                                   this.addCharacteristic(Characteristic.CarbonDioxideLevel);
+
+      co2LevelCharacteristic.on('get', this.getCarbonDioxideLevel.bind(this))
+                            .eventEnabled = true;
     }
 
     updateCharacteristics() {
       this.getCharacteristic(Characteristic.AirQuality)
             .updateValue(this.transformCO2ToAirQuality());
+      this.getCharacteristic(Characteristic.CarbonDioxideLevel)
+            .updateValue(this.accessory.co2);
     }
 
     getAirQuality(callback) {
       this.accessory.refreshData(function(err,data) {
         callback(err, this.transformCO2ToAirQuality());
+      }.bind(this));
+    }
+
+    getCarbonDioxideLevel(callback) {
+      this.accessory.refreshData(function(err,data) {
+        callback(err, this.accessory.co2);
       }.bind(this));
     }
 

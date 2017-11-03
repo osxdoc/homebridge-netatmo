@@ -1,5 +1,5 @@
 {
-	"name": "homebridge-netatmo",
+	"name": "homebridge-netatmo-schmittx",
 	"version": "0.2.1",
 	"description": "Netatmo plugin for homebridge: https://github.com/nfarina/homebridge",
 	"license": "ISC",

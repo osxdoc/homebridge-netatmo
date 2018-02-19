@@ -1,12 +1,12 @@
 {
 	"name": "homebridge-netatmo-schmittx",
-	"version": "0.2.2",
+	"version": "0.3.0",
 	"description": "Netatmo plugin for homebridge: https://github.com/nfarina/homebridge",
 	"license": "ISC",
 	"keywords": ["homebridge-plugin"],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/planetk/homebridge-netatmo.git"
+		"url": "https://github.com/schmittx/homebridge-netatmo.git"
 	},
 	"engines": {
 		"node": ">=0.12.0",

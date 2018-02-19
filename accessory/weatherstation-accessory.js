@@ -1,17 +1,15 @@
 'use strict';
 
 const DEFAULT_SERVICES = [
-        "temperature-homekit",
-        "humidity-homekit",
-        "co2-homekit",
         "airquality-homekit",
-        "noiselevel-legacy",
+        "battery-homekit",
+        "co2-homekit",
+        "humidity-homekit",
+        "temperature-homekit",
         "airpressure-legacy",
+        "noiselevel-legacy",
         "rain-legacy",
-        "wind-legacy",
-        "battery-homekit"
-////        "eveweatherhistory-elgato",
-////        "eveweather-elgato"
+        "wind-legacy"
       ];
 
 var homebridge;
@@ -50,7 +48,7 @@ module.exports = function(pHomebridge) {
       this.lowBattery = false;
       this.airPressure = 1000;
       this.humidity = 50;
-			this.noiseLevel = 0;
+      this.noiseLevel = 0;
       this.rainLevel = 0.0;
       this.rainLevelSum1 = 0.0;
       this.rainLevelSum24 = 0.0;
@@ -60,9 +58,9 @@ module.exports = function(pHomebridge) {
       this.gustAngle = 0;
  
       this.refreshData(function(err, data) {});
-  	}
+    }
 
-  	refreshData(callback) {
+    refreshData(callback) {
       this.device.refreshDeviceData(function (err, deviceData) {
         if (!err) {
           this.notifyUpdate(deviceData);
@@ -83,11 +81,11 @@ module.exports = function(pHomebridge) {
 
     getLowBatteryLevel() {
       var levels = {
-        NAMain: 4560,
-        NAModule1: 4000,
-        NAModule2: 4360,
-        NAModule3: 4000,
-        NAModule4: 4560
+        NAMain: 4560, // Base Station
+        NAModule1: 4000, // Outdoor Module
+        NAModule2: 4360, // Wind Gauge
+        NAModule3: 4000, // Rain Gauge
+        NAModule4: 4560 // Indoor Module
       };
 
       if (levels[this.netatmoType]) {
@@ -98,11 +96,11 @@ module.exports = function(pHomebridge) {
 
     getFullBatteryLevel() {
       var levels = {
-        NAMain: 5640,
-        NAModule1: 5500,
-        NAModule2: 5590,
-        NAModule3: 5500,
-        NAModule4: 5640
+        NAMain: 5640, // Base Station
+        NAModule1: 5500, // Outdoor Module
+        NAModule2: 5590, // Wind Gauge
+        NAModule3: 5500, // Rain Gauge
+        NAModule4: 5640 // Indoor Module
       };
 
       if (levels[this.netatmoType]) {
@@ -112,12 +110,12 @@ module.exports = function(pHomebridge) {
     }
 
 
-		mapAccessoryDataToWeatherData(accessoryData) {
-		  var result = {};
+    mapAccessoryDataToWeatherData(accessoryData) {
+      var result = {};
 
-		  var dashboardData = accessoryData.dashboard_data; 
-		  if (dashboardData) {
-		  	if (dashboardData.Temperature) {
+      var dashboardData = accessoryData.dashboard_data; 
+      if (dashboardData) {
+        if (dashboardData.Temperature) {
           result.currentTemperature = dashboardData.Temperature;
         }
         if (dashboardData.CO2) {
@@ -153,7 +151,7 @@ module.exports = function(pHomebridge) {
         if (dashboardData.GustAngle) {
           result.gustAngle = Math.round(dashboardData.GustAngle);
         }
-		  }
+      }
 
       result.batteryPercent = accessoryData.battery_percent;
       result.lowBattery = false;
@@ -172,8 +170,8 @@ module.exports = function(pHomebridge) {
         result.batteryPercent = 100;
       }
 
-    	return result;
-		}
+      return result;
+    }
 
     applyWeatherData(weatherData) {
       var dataChanged = false;

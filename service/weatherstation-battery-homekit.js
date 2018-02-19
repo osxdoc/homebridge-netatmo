@@ -37,7 +37,7 @@ module.exports = function(pHomebridge) {
     }
 
     getChargingState(callback) {
-      callback(null, Characteristic.ChargingState.NOT_CHARGING);
+      callback(null, Characteristic.ChargingState.NOT_CHARGEABLE);
     }
 
     updateCharacteristics() {
